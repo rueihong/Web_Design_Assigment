@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="line_chart.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>  Pie Chart</title>
+ <!-- Chart.js core -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<!-- Data labels plugin -->
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+<!-- PapaParse for CSV parsing -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+  <style>
+    
+    .chart-container {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center;    /* Center horizontally */
+    gap: 15px;              /* Space between controls and chart */
+    margin-top: 20px;
+}
+
+#controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#pieChart {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    width: 500px;
+    height: 500px;
+}
+.content {
+        margin-left: 220px; /* match or slightly larger than sidebar width */
+        padding: 20px;
+    }
+
+    
+  </style>
+</head>
+
+<body class="body2">
+
+    <!-- Page Wrapper -->
+  <div class="sidebar">
+    <a href="index.html">Home</a>
+    <a href="covid.html">About Covid</a>
+    <a href="line_chart.html">Line Chart</a>
+    <a href="pie_chart.html">Pie Chart</a>
+    <a href="bar_chart.html">Bar Chart</a>
+    <a href="https://data.moh.gov.my/data-catalogue/covid_cases"><img src="KKMNOW.webp" width="150px" height=75px"></a>
+  </div>
+  <div class="content">
+    <div style="border: 1px solid #ccc; border-radius: 8px; padding: 15px; margin-bottom: 20px; background: #f9f9f9;">
+        <h2 style="margin-top: 0;">COVID-19 Cases Overview</h2>
+        <p>
+            This dashboard displays the distribution of COVID-19 cases in different regions for the selected year.
+            Use the dropdown menu to choose a year and the pie chart will update automatically to show the data for that period.
+            The chart provides a quick visual breakdown, helping you compare the proportions of cases across different regions.
+        </p>
+    </div>
+</div>
+
+<div class="chart-container">
+  <div style="border: 1px solid #ccc; border-radius: 8px; background: #fff; padding: 25px 25px 15px 25px; display: flex; flex-direction: column; align-items: center; width: 540px;">
+    <div id="controls" style="margin-bottom: 10px;">
+      <label for="yearSelect">Select Year:</label>
+      <select id="yearSelect">
+        <option value="all">All Years</option>
+      </select>
+    </div>
+    <canvas id="pieChart"></canvas>
+  </div>
+</div>
+
+</div>
+
+
+<script>
+let parsedData = [];
+let chartInstance = null;
+
+function extractYear(dateStr) {
+  const d = new Date(dateStr);
+  if (!isNaN(d)) return d.getFullYear();
+  if (/^\d{4}/.test(dateStr)) return parseInt(dateStr.slice(0,4));
+  return null;
+}
+
+function groupByState(dataRows, selectedYear) {
+  const sums = {};
+  for (const row of dataRows) {
+    const state = row.state?.trim() || 'Unknown';
+    const year = extractYear(row.date);
+    if (selectedYear !== 'all' && year !== selectedYear) continue;
+    const cases = parseInt(row.cases_new) || 0;
+    sums[state] = (sums[state] || 0) + cases;
+  }
+  return sums;
+}
+
+function populateYears(dataRows) {
+  const years = new Set();
+  for (const row of dataRows) {
+    const y = extractYear(row.date);
+    if (y) years.add(y);
+  }
+  const sorted = Array.from(years).sort((a,b) => b-a);
+  const yearSelect = document.getElementById('yearSelect');
+  for (const y of sorted) {
+    const opt = document.createElement('option');
+    opt.value = y;
+    opt.textContent = y;
+    yearSelect.appendChild(opt);
+  }
+}
+
+function drawPie(sums) {
+  const labels = Object.keys(sums);
+  const values = labels.map(l => sums[l]);
+  const total = values.reduce((a, b) => a + b, 0);
+
+  if (chartInstance) chartInstance.destroy();
+
+  const canvas = document.getElementById('pieChart');
+  canvas.width = 500;  
+  canvas.height = 500; 
+
+  chartInstance = new Chart(canvas, {
+    type: 'pie',
+    data: {
+      labels,
+      datasets: [{
+        data: values,
+        backgroundColor: [
+          '#FF6384', '#36A2EB', '#FFCE56', '#66BB6A', '#BA68C8',
+          '#FF7043', '#26C6DA', '#9CCC65', '#FFEB3B', '#8D6E63',
+          '#78909C', '#F06292', '#4DB6AC', '#AED581', '#9575CD',
+          '#FFF176', '#81D4FA'
+        ]
+      }]
+    },
+    options: {
+      responsive: false,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'right' },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              const val = ctx.parsed || 0;
+              const pct = total ? (val / total * 100).toFixed(1) : 0;
+              return `${ctx.label}: ${val.toLocaleString()} (${pct}%)`;
+            }
+          }
+        },
+        datalabels: {
+          color: '#fff',
+          formatter: (value) => {
+            return ((value / total) * 100).toFixed(1) + '%';
+          }
+        }
+      }
+    }
+  });
+}
+
+
+
+// Load CSV from dataset folder
+Papa.parse("dataset/covid_cases.csv", {
+  download: true,
+  header: true,
+  skipEmptyLines: true,
+  complete: function(results) {
+    parsedData = results.data;
+    populateYears(parsedData);
+    drawPie(groupByState(parsedData, 'all'));
+  },
+  error: function(err) {
+    alert("Error loading CSV: " + err);
+  }
+});
+
+// Change year on selection
+document.getElementById('yearSelect').addEventListener('change', function() {
+  const sel = this.value;
+  const year = sel === 'all' ? 'all' : parseInt(sel);
+  drawPie(groupByState(parsedData, year));
+});
+
+function populateStateDropdown(data) {
+  const stateSelect = document.getElementById("stateSelect");
+  const states = [...new Set(data.map(row => row.state))];
+  states.forEach(state => {
+    const option = document.createElement("option");
+    option.value = state;
+    option.textContent = state;
+    stateSelect.appendChild(option);
+  });
+}
+
+  document.getElementById("stateSelect").addEventListener("change", updateTable);
+</script>
+
+
+</body>
+
+</html>

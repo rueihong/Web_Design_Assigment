@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>COVID-19 Cases Comparison</title>
+<link rel="stylesheet" href="line_chart.css">
+</head>
+<body>
+
+    <div class="sidebar">
+    <a href="index.html">Home</a>
+    <a href="covid.html">About Covid</a>
+    <a href="line_chart.html">Line Chart</a>
+    <a href="pie_chart.html">Pie Chart</a>
+    <a href="bar_chart.html">Bar Chart</a>
+    <a href="https://data.moh.gov.my/data-catalogue/covid_cases"><img src="KKMNOW.webp" width="150px" height=75px"></a>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>COVID-19 Cases Comparison</h1>
+        </header>
+
+        <div class="card">
+            <p class="small">Select the Exact Month of any two Malaysian state of the total COVID-19 cases from the dataset.</p>
+            
+            <div class="controls">
+                <label for="monthSelect">Select Month:</label>
+                <select id="monthSelect"></select>
+
+                <label for="state1">Select First State:</label>
+                <select id="state1"></select>
+
+                <label for="state2">Select Second State:</label>
+                <select id="state2"></select>
+
+                <button onclick="updateChart()">Compare</button>
+            </div>
+
+            <div id="Line_chart">
+                <div class="chart-container" id="chart">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PapaParse to read CSV -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script>
+    let covidData = {};
+    let statesList = [];
+    let monthsList = [];
+
+    Papa.parse("dataset/covid_cases.csv", {
+        download: true,
+        header: true,
+        complete: function(results) {
+            processData(results.data);
+        }
+    });
+
+    function processData(data) {
+        data.forEach(row => {
+            let date = new Date(row.date);
+            let monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`; // YYYY-MM
+            let state = row.state;
+            let cases = parseInt(row.cases_new) || 0;
+
+            if (!covidData[monthKey]) covidData[monthKey] = {};
+            if (!covidData[monthKey][state]) covidData[monthKey][state] = 0;
+            covidData[monthKey][state] += cases;
+
+            if (!monthsList.includes(monthKey)) monthsList.push(monthKey);
+            if (!statesList.includes(state)) statesList.push(state);
+        });
+
+        monthsList.sort();
+        statesList.sort();
+
+        populateDropdowns();
+    }
+
+    function populateDropdowns() {
+        let monthSelect = document.getElementById("monthSelect");
+        monthsList.forEach(month => {
+            let opt = document.createElement("option");
+            opt.value = month;
+            opt.textContent = month;
+            monthSelect.appendChild(opt);
+        });
+
+        let select1 = document.getElementById("state1");
+        let select2 = document.getElementById("state2");
+
+        statesList.forEach(state => {
+            let opt1 = document.createElement("option");
+            opt1.value = state;
+            opt1.textContent = state;
+            select1.appendChild(opt1);
+
+            let opt2 = document.createElement("option");
+            opt2.value = state;
+            opt2.textContent = state;
+            select2.appendChild(opt2);
+        });
+
+        // Default selections
+        monthSelect.value = monthsList[0];
+        select1.value = "Selangor";
+        select2.value = "Johor";
+
+        updateChart();
+    }
+
+    function updateChart() {
+        let month = document.getElementById("monthSelect").value;
+        let state1 = document.getElementById("state1").value;
+        let state2 = document.getElementById("state2").value;
+
+        let cases1 = covidData[month][state1] || 0;
+        let cases2 = covidData[month][state2] || 0;
+        let maxCases = Math.max(cases1, cases2);
+
+        let chart = document.getElementById("chart");
+        chart.innerHTML = "";
+
+        let maxHeight = 350; //Max Height range for bars
+
+        // Create bar 1 and 2
+        let bar1 = document.createElement("div");
+        bar1.className = "bar";
+        let bar1Inner = document.createElement("div");
+        bar1Inner.style.backgroundColor = "#FEFE62";
+        bar1Inner.style.height = "0px"; // start from 0
+        bar1Inner.textContent = cases1.toLocaleString();
+        bar1.appendChild(bar1Inner);
+        let label1 = document.createElement("div");
+        label1.className = "label";
+        label1.textContent = state1;
+        bar1.appendChild(label1);
+        chart.appendChild(bar1);
+
+        let bar2 = document.createElement("div");
+        bar2.className = "bar";
+        let bar2Inner = document.createElement("div");
+        bar2Inner.style.backgroundColor = "#D41159";
+        bar2Inner.style.height = "0px"; // start from 0
+        bar2Inner.textContent = cases2.toLocaleString();
+        bar2.appendChild(bar2Inner);
+        let label2 = document.createElement("div");
+        label2.className = "label";
+        label2.textContent = state2;
+        bar2.appendChild(label2);
+        chart.appendChild(bar2);
+
+        // Animate growth after small delay
+        setTimeout(() => {
+            bar1Inner.style.height = (cases1 / maxCases) * maxHeight + "px";
+            bar2Inner.style.height = (cases2 / maxCases) * maxHeight + "px";
+        }, 100);
+    }
+
+</script>
+</body>
+</html>

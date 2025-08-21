@@ -1,0 +1,231 @@
+body{
+	background:url('line_chart_background.jpg')no-repeat fixed; 
+	background-size:100% 100%; 
+}
+.contain{
+	display:flex;
+	margin:16px 16px 16px 200px; 
+	color:#0f172a;
+    padding: 20px;
+}	
+	
+.container{
+	width:1000px;
+	margin:0 auto;
+}
+header{
+    display:flex;
+	align-items:center;
+	justify-content:space-between;
+}
+h1{
+	font-family: fangsong;
+    font-size:36px;
+	margin:0;
+}
+.card{
+    background:white;
+	border-radius:12px;
+	padding:16px;
+	box-shadow:0 6px 18px rgba(15,23,42,0.06);
+	margin-top:16px;
+}
+
+.small{
+	font-family: cursive;
+    font-size:18px;
+	color:#475569;
+}
+h3{
+	font-family: math;
+	font-size:28px
+}	
+table{
+    border-collapse: collapse;
+    width: 80%;
+    margin: 20px auto;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+  }
+th,td{
+    border: 1px solid #ddd;
+    text-align: center;
+    padding: 8px;
+}
+th{
+    background-color: #4CAF50;
+    color: white;
+}
+tr:nth-child(even){
+    background-color: #f2f2f2;
+}
+tr:hover{
+    background-color: #ddd;
+}
+p{
+	font-size:18px;
+}	
+.card a{
+	color:blue;
+	text-decoration: none;
+	transition: color 0.3s ease;
+}	
+.card a:hover{
+	color:#9E9595;
+}	
+#Line_chart {
+	text-align:center;
+    width: 100%;
+    max-width: 929px;  
+    background: linear-gradient(to bottom right, #ffffff, #f4f6fa); 
+    border-radius: 15px; 
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15); 
+    padding: 15px; 
+}
+.sidebar {
+	top:0;
+	left:0;
+    width: 200px;
+    background-color: #2c3e50;
+    height: 100%;
+    padding-top: 20px;
+    position: fixed;
+	margin:0;
+}
+
+.sidebar a {
+    display: block;
+    color: white;
+    padding: 12px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: #1abc9c;
+}
+
+.controls {
+    margin-top: 20px;
+    text-align: center;
+}
+
+select, button {
+    padding: 6px 10px;
+    margin: 5px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+button {
+    background-color: #1abc9c;
+    color: white;
+    cursor: pointer;
+    border: none;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #16a085;
+}
+
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 400px;
+    margin-top: 40px;
+    padding: 10px;
+    background-color: white;
+    border-left: 2px solid #416f82;
+    border-bottom: 2px solid #333;
+}
+
+.bar {
+    width: 120px;
+    margin: 0 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    color: rgb(0, 0, 0);
+    font-weight: bold;
+}
+
+.bar div {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 5px;
+}
+
+.label {
+    margin-top: 10px;
+    color: #333;
+    font-weight: bold;
+}
+
+.bar div {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 5px;
+    transition: height 0.8s ease-out; /* Smooth growth effect */
+}
+#state {
+    padding: 8px 14px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    color: #333;
+    outline: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+#state:hover {
+    border-color: #007bff;
+    background-color: #f1f8ff;
+}
+
+#state:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+#choiceState {
+    padding: 8px 14px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    color: #333;
+    outline: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+#choiceState:hover {
+    border-color: #007bff;
+    background-color: #f1f8ff;
+}
+
+#choiceState:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+.btn {
+      background-color: #20c997;   /* 青色 */
+      color: white;
+      padding: 12px 24px;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    .btn:hover {
+      background-color: #138f75;  /* hover 时变深青色 */
+      transform: scale(1.05);     /* 鼠标移上去放大一点 */
+    }

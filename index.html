@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Covid-19 Data Dashboard</title>
+  <link rel="stylesheet" href="line_chart.css">
+  <style>
+ 
+
+    /* Main content */
+    .content {
+      margin-left: 220px;
+      padding: 20px;
+    }
+
+    .section {
+      border: 2px solid #ccc;
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+      box-shadow: 0px 0px 8px rgba(0,0,0,0.1);
+    }
+
+    .chart-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .chart-card {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fff;
+      padding: 15px;
+      text-align: center;
+      transition: 0.3s;
+    }
+
+    .chart-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .chart-card img {
+      max-width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+
+    .chart-card h3 {
+      margin-top: 10px;
+      font-size: 18px;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <a href="index.html">Home</a>
+    <a href="covid.html">About Covid</a>
+    <a href="line_chart.html">Line Chart</a>
+    <a href="pie_chart.html">Pie Chart</a>
+    <a href="bar_chart.html">Bar Chart</a>
+    <a href="https://data.moh.gov.my/data-catalogue/covid_cases"><img src="KKMNOW.webp" width="150px" height=75px"></a>
+  </div>
+
+  <!-- Main content -->
+  <div class="content">
+    <div class="section">
+      <h1>Covid-19 Data Dashboard</h1>
+      <p>Welcome to the Covid-19 Data Dashboard. This website provides interactive visualizations of Covid-19 cases and trends, helping you understand the pandemic's impact over time. You can explore different chart types, view datasets, and read background information about Covid-19.</p>
+    </div>
+
+    <div class="section">
+      <h2>Explore the Charts</h2>
+      <div class="chart-links">
+        <a href="line_chart.html" class="chart-card">
+          
+          <h3>COVID-19 Monthly Cases</h3>
+          <button class="btn">View</button>
+        </a>
+
+        <a href="pie_chart.html" class="chart-card">
+          
+          <h3>COVID-19 Yearly Cases</h3>
+          <button class="btn">View</button>
+        </a>
+
+        <a href="bar_chart.html" class="chart-card">
+          
+          <h3>COVID-19 Cases Comparison</h3>
+          <button class="btn">View</button>
+        </a>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Additional Resources</h2>
+      <ul>
+        <li><a href="covid.html">About Covid-19</a></li>
+        <li><a href="https://data.moh.gov.my/data-catalogue/covid_cases"> Where the Dataset From</a></li>
+        <img src="KKMNOW.webp" width="125px" height="75px">
+      </ul>
+    </div>
+  </div>
+
+</body>
+</html>
